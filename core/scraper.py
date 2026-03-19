@@ -1,6 +1,6 @@
 import time
 
-def process_jobs(page, keyword, location, resume_keywords, apply_function, limit):
+def process_jobs(page, keyword, location, resume_keywords, apply_function, limit, tracker=None):
     print(f"Searching for '{keyword}' in '{location}'...")
     url = f"https://www.linkedin.com/jobs/search/?keywords={keyword}&location={location}"
     page.goto(url)
@@ -41,16 +41,18 @@ def process_jobs(page, keyword, location, resume_keywords, apply_function, limit
             match_count = sum(1 for kw in resume_keywords if kw.lower() in description.lower())
             
             if match_count > 0:
-                print(f"[Match] Matched {match_count} keywords.")
+                print(f"[Match] Matched {match_count} keywords from your resume.")
                 if easy_apply_btn:
                     print("Attempting Easy Apply...")
                     success = apply_function(page)
                     if success:
                         applied_count += 1
+                        if tracker:
+                            tracker.log_application(title, company)
                 else:
                     print("No Easy Apply button available. Skipping.")
             else:
-                print(f"[Skip] Did NOT match any keywords.")
+                print(f"[Skip] Did NOT match your resume keywords.")
                 
         except Exception as e:
             print(f"Error processing job card: {e}")

@@ -4,6 +4,8 @@ from playwright.sync_api import sync_playwright
 from core.auth import get_browser_context, login_linkedin
 from core.scraper import process_jobs
 from core.bot import auto_apply
+from core.optimizer import extract_keywords_from_pdf
+from core.tracker import Tracker
 
 def load_settings():
     with open("config/settings.json", "r") as f:
@@ -13,8 +15,12 @@ def run_application_bot():
     print("Starting Auto-Apply AI...")
     settings = load_settings()
     
-    # Very basic resume keywords - for a generalized match
-    resume_keywords = ["python", "java", "automation", "api", "software", "developer", "engineer", "react", "spring", "node", "aws", "docker"]
+    # Extract keywords from the user's PDF resume
+    resume_path = "Prakhar_s_Resume.pdf"
+    resume_keywords = extract_keywords_from_pdf(resume_path)
+    
+    # Initialize the Tracker (Logs to Google Sheets & CSV)
+    tracker = Tracker(sheet_name="Auto-Apply Jobs Tracker")
     
     job_title = settings["search_filters"]["job_titles"][0]
     location = settings["search_filters"]["locations"][0]
@@ -37,7 +43,8 @@ def run_application_bot():
                 location=location, 
                 resume_keywords=resume_keywords, 
                 apply_function=auto_apply, 
-                limit=limit
+                limit=limit,
+                tracker=tracker
             )
             
             print(f"\nFinished run. Total applied: {applied}")

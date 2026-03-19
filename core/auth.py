@@ -4,7 +4,7 @@ from playwright.sync_api import Playwright, BrowserContext
 STATE_FILE = "config/state.json"
 
 def get_browser_context(playwright: Playwright, headless: bool = False) -> BrowserContext:
-    browser = playwright.chromium.launch(headless=headless)
+    browser = playwright.webkit.launch(headless=headless)
     
     # Use existing state if available
     context = None
