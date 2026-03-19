@@ -1,0 +1,13 @@
+# Environments
+venv/
+.env
+config/credentials.env
+config/state.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mac OS
+.DS_Store

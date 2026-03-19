@@ -1,0 +1,8 @@
+{
+    "search_filters": {
+        "job_titles": ["Java Developer", "Software Engineer"],
+        "locations": ["Remote"],
+        "experience": "Mid-Senior level"
+    },
+    "daily_applications_limit": 30
+}
